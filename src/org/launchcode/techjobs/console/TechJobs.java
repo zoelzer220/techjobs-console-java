@@ -1,8 +1,15 @@
 package org.launchcode.techjobs.console;
 
+import org.launchcode.techjobs.console.JobData;
+
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
+import java.util.Set;
+
+
 
 /**
  * Created by LaunchCode
@@ -42,6 +49,7 @@ public class TechJobs {
                 } else {
 
                     ArrayList<String> results = JobData.findAll(columnChoice);
+                    Collections.sort(results);
 
                     System.out.println("\n*** All " + columnChoices.get(columnChoice) + " Values ***");
 
@@ -58,11 +66,13 @@ public class TechJobs {
 
                 // What is their search term?
                 System.out.println("\nSearch term: ");
-                String searchTerm = in.nextLine();
+                String searchTerm = in.nextLine().toLowerCase();
 
                 if (searchField.equals("all")) {
-                    System.out.println("Search all fields not yet implemented.");
+                    printJobs(JobData.findByValue(searchTerm));
+//                    System.out.println("Search all fields not yet implemented.");
                 } else {
+                    System.out.println(searchTerm);
                     printJobs(JobData.findByColumnAndValue(searchField, searchTerm));
                 }
             }
@@ -111,6 +121,24 @@ public class TechJobs {
     // Print a list of jobs
     private static void printJobs(ArrayList<HashMap<String, String>> someJobs) {
 
-        System.out.println("printJobs is not implemented yet");
+
+        if (someJobs.size() == 0) {
+            System.out.println("There were no results found, please try your search again.");
+
+        } else {
+            for (int i = 0; i < someJobs.size(); i++) {
+                HashMap<String, String> jobListing = someJobs.get(i);
+
+                System.out.println("*****");
+
+                for (Map.Entry<String, String> detail : jobListing.entrySet()) {
+                    System.out.println(detail.getKey() + ": " + detail.getValue());
+                }
+
+                System.out.println("*****\n");
+            }
+
+        }
     }
+
 }
